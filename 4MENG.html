@@ -1,0 +1,950 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SJKC English Master: Level 3</title>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #6c5ce7;
+            --secondary: #00cec9;
+            --accent: #fdcb6e;
+            --danger: #ff7675;
+            --success: #00b894;
+            --card-bg: rgba(255, 255, 255, 0.95);
+        }
+
+        body {
+            font-family: 'Nunito', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow-x: hidden;
+            user-select: none;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        /* --- PARTICLES (Confetti) --- */
+        #particles {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none;
+            z-index: 999;
+        }
+
+        /* --- GAME CONTAINER --- */
+        #game-card {
+            background: var(--card-bg);
+            width: 100%;
+            max-width: 550px;
+            border-radius: 30px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            position: relative;
+            backdrop-filter: blur(10px);
+            border: 4px solid rgba(255,255,255,0.5);
+            transform: translateY(0);
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        /* --- HEADER --- */
+        header {
+            background: var(--primary);
+            color: white;
+            padding: 15px 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-family: 'Fredoka One', cursive;
+            font-size: 1.4rem;
+            box-shadow: 0 5px 15px rgba(108, 92, 231, 0.3);
+            z-index: 10;
+        }
+
+        #score-badge {
+            background: var(--accent);
+            color: #2d3436;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 1rem;
+            box-shadow: 0 4px 0 rgba(0,0,0,0.1);
+        }
+
+        /* --- IMAGE STAGE --- */
+        #visual-stage {
+            width: 100%;
+            height: 280px;
+            background: #dfe6e9;
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        #game-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .loader {
+            width: 50px;
+            height: 50px;
+            border: 6px solid #fff;
+            border-bottom-color: var(--secondary);
+            border-radius: 50%;
+            position: absolute;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin { 100% { transform: rotate(360deg); } }
+
+        /* --- CONTENT AREA --- */
+        #content {
+            padding: 25px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+        }
+
+        #sentence-box {
+            font-size: 1.3rem;
+            color: #2d3436;
+            text-align: center;
+            font-weight: 700;
+            line-height: 1.5;
+            background: #f1f2f6;
+            padding: 15px;
+            border-radius: 15px;
+            width: 100%;
+            box-sizing: border-box;
+            border: 2px dashed #b2bec3;
+        }
+
+        .blank {
+            color: var(--primary);
+            text-decoration: underline;
+            font-weight: 900;
+        }
+
+        .filled-correct {
+            color: var(--success);
+            text-decoration: none;
+            animation: pop 0.3s;
+        }
+
+        /* Input Styling */
+        input {
+            width: 100%;
+            padding: 15px;
+            font-family: 'Fredoka One', cursive;
+            font-size: 1.8rem;
+            text-align: center;
+            border: 4px solid #dfe6e9;
+            border-radius: 20px;
+            outline: none;
+            color: var(--primary);
+            text-transform: uppercase;
+            transition: all 0.2s;
+            box-shadow: inset 0 2px 5px rgba(0,0,0,0.05);
+            box-sizing: border-box;
+        }
+
+        input:focus {
+            border-color: var(--primary);
+            transform: scale(1.02);
+            background: #fff;
+        }
+
+        input.shake {
+            border-color: var(--danger);
+            color: var(--danger);
+            background: #ffeaa7;
+            animation: shake 0.4s cubic-bezier(.36,.07,.19,.97) both;
+        }
+
+        @keyframes shake {
+            10%, 90% { transform: translate3d(-2px, 0, 0); }
+            20%, 80% { transform: translate3d(4px, 0, 0); }
+            30%, 50%, 70% { transform: translate3d(-6px, 0, 0); }
+            40%, 60% { transform: translate3d(6px, 0, 0); }
+        }
+
+        @keyframes pop {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+
+        /* --- CONTROLS --- */
+        .controls {
+            display: flex;
+            gap: 15px;
+            width: 100%;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 15px;
+            font-family: 'Fredoka One', cursive;
+            font-size: 1.1rem;
+            cursor: pointer;
+            color: white;
+            box-shadow: 0 4px 0 rgba(0,0,0,0.2);
+            transition: transform 0.1s, box-shadow 0.1s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .btn:active {
+            transform: translateY(4px);
+            box-shadow: 0 0 0 rgba(0,0,0,0.2);
+        }
+
+        .btn-speak { background: var(--secondary); }
+        .btn-check { background: var(--primary); font-size: 1.2rem; }
+
+        /* --- OVERLAY --- */
+        #overlay {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(108, 92, 231, 0.95);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            z-index: 100;
+            text-align: center;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .big-btn {
+            background: var(--accent);
+            color: #2d3436;
+            border: none;
+            padding: 20px 60px;
+            font-family: 'Fredoka One', cursive;
+            font-size: 2rem;
+            border-radius: 50px;
+            cursor: pointer;
+            margin-top: 30px;
+            box-shadow: 0 8px 0 #e17055;
+            transition: all 0.2s;
+        }
+
+        .big-btn:hover { transform: scale(1.05); }
+        .big-btn:active { transform: translateY(8px); box-shadow: 0 0 0 #e17055; }
+
+        .hidden { display: none !important; }
+
+        /* =========================================================================
+           STUDENT NUMBER SELECTION MODAL (SJKC NAN HWA)
+           ========================================================================= */
+        .modal-veil {
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            background: rgba(15, 23, 42, 0.75);
+            backdrop-filter: blur(8px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 10000;
+            padding: 16px;
+            box-sizing: border-box;
+        }
+
+        .modal-window {
+            background: #ffffff;
+            border-radius: 30px;
+            padding: 28px 24px;
+            max-width: 580px;
+            width: 100%;
+            text-align: center;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+            border: 4px solid var(--primary);
+        }
+
+        .student-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 8px;
+            margin: 16px 0;
+        }
+
+        .num-btn {
+            background: #f1f2f6;
+            border: 2px solid #b2bec3;
+            border-radius: 12px;
+            padding: 12px 2px;
+            font-family: 'Fredoka One', cursive;
+            font-size: 1.1rem;
+            color: #2d3436;
+            cursor: pointer;
+            transition: all 0.1s;
+        }
+        .num-btn:hover { background: #dfe6e9; transform: translateY(-2px); }
+        .num-btn.selected {
+            background: var(--accent);
+            border-color: #e17055;
+            color: #2d3436;
+            transform: scale(1.05);
+            box-shadow: 0 4px 0 #e17055;
+        }
+
+        .confirmed-name-box {
+            background: #f8f9fa;
+            border: 2px dashed var(--primary);
+            border-radius: 14px;
+            padding: 10px;
+            margin: 14px 0;
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        /* =========================================================================
+           OFFICIAL SJKC NAN HWA CERTIFICATE
+           ========================================================================= */
+        #certificate-screen {
+            display: none;
+            width: 100%;
+            max-width: 820px;
+            background: #ffffff;
+            border-radius: 26px;
+            padding: 32px 36px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+            border: 10px double var(--primary);
+            margin: auto;
+            position: relative;
+            box-sizing: border-box;
+        }
+
+        .cert-inner {
+            border: 2px solid #dfe6e9;
+            padding: 22px;
+            border-radius: 16px;
+            text-align: center;
+        }
+
+        .school-title {
+            font-size: 24px;
+            font-family: 'Fredoka One', cursive;
+            color: #2d3436;
+            margin-bottom: 2px;
+        }
+        .school-sub {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 12px;
+        }
+
+        .cert-title {
+            font-size: 22px;
+            font-family: 'Fredoka One', cursive;
+            color: #d63031;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin: 8px 0 4px;
+        }
+
+        .cert-name {
+            font-size: 28px;
+            font-family: 'Fredoka One', cursive;
+            color: var(--primary);
+            border-bottom: 3px solid var(--accent);
+            display: inline-block;
+            padding: 2px 24px;
+            margin: 10px 0;
+        }
+
+        .cert-p {
+            font-size: 15px;
+            color: #2d3436;
+            line-height: 1.6;
+            font-weight: 600;
+            margin: 10px 0;
+        }
+
+        .cert-meta-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            max-width: 580px;
+            margin: 16px auto;
+            text-align: left;
+            background: #f8f9fa;
+            padding: 12px 18px;
+            border-radius: 14px;
+            border: 1px solid #dfe6e9;
+            font-size: 13px;
+        }
+        .cert-meta-grid div strong { color: var(--primary); }
+
+        .cert-footer-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            margin-top: 26px;
+            padding: 0 10px;
+        }
+
+        .cert-seal {
+            width: 85px;
+            height: 85px;
+            border: 3px dashed var(--primary);
+            border-radius: 50%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            font-weight: 900;
+            color: var(--primary);
+            text-transform: uppercase;
+            transform: rotate(-10deg);
+        }
+
+        .cert-sig {
+            border-top: 2px solid #2d3436;
+            width: 170px;
+            text-align: center;
+            font-size: 11px;
+            font-weight: 700;
+            padding-top: 5px;
+            color: #636e72;
+        }
+
+        .cert-actions {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        @media print {
+            body * { visibility: hidden; }
+            #certificate-screen, #certificate-screen * { visibility: visible; }
+            #certificate-screen {
+                position: absolute; left: 0; top: 0; width: 100%; border: 6px double var(--primary); box-shadow: none; margin: 0;
+            }
+            .cert-actions { display: none !important; }
+        }
+    </style>
+</head>
+<body>
+
+    <canvas id="particles"></canvas>
+
+    <!-- Main Game Box -->
+    <div id="game-card">
+        <header>
+            <div>🇬🇧 Level 3</div>
+            <div id="score-badge">Word 1 / 100</div>
+        </header>
+
+        <div id="visual-stage">
+            <div class="loader" id="loader"></div>
+            <img id="game-image" src="" alt="Visual Clue" onerror="imgError()">
+        </div>
+
+        <div id="content">
+            <div id="sentence-box">Loading...</div>
+            
+            <input type="text" id="input-word" placeholder="TYPE HERE" autocomplete="off" spellcheck="false">
+
+            <div class="controls">
+                <button class="btn btn-speak" onclick="playAudio()">🔊 Hear It</button>
+                <button class="btn btn-check" onclick="checkAnswer()">Check ✅</button>
+            </div>
+        </div>
+
+        <!-- Start Overlay -->
+        <div id="overlay">
+            <h1 style="font-size: 3.5rem; margin: 0; text-shadow: 4px 4px 0 rgba(0,0,0,0.2); font-family: 'Fredoka One', cursive;">ENGLISH<br>MASTER</h1>
+            <p style="font-size: 1.2rem; margin-top: 10px;">Look. Listen. Type.</p>
+            <button class="big-btn" onclick="startGame()">PLAY!</button>
+        </div>
+    </div>
+
+    <!-- Student Number Selection Modal (Triggered strictly at 100% progress) -->
+    <div class="modal-veil" id="student-modal">
+        <div class="modal-window">
+            <div style="font-size: 44px; margin-bottom: 4px;">🎒🎓</div>
+            <h2 style="font-family: 'Fredoka One', cursive; color: var(--primary); margin: 0;">Congratulations!</h2>
+            <p style="font-size: 14px; color: #636e72; margin: 6px 0 12px;">SJKC Nan Hwa • Click your assigned student number:</p>
+            
+            <div class="student-grid" id="student-grid"></div>
+
+            <div class="confirmed-name-box" id="name-display">Please select your number above</div>
+
+            <div style="display: flex; justify-content: center; gap: 10px; margin-top: 14px;">
+                <button class="btn" style="background:#b2bec3; max-width: 140px;" onclick="editNamePrompt()">✏️ Edit Name</button>
+                <button class="btn" id="btn-cert-submit" style="background:var(--success); max-width: 220px;" onclick="openCertificate()" disabled>Get Certificate 🏆</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- SJKC Nan Hwa Official Certificate -->
+    <section id="certificate-screen">
+        <div class="cert-inner">
+            <div style="font-size: 38px;">🏫</div>
+            <h2 class="school-title">SJKC NAN HWA</h2>
+            <div class="school-sub">南华国民型华文小学 • ENGLISH LANGUAGE PANEL</div>
+
+            <div class="cert-title">Certificate of Home-Based Learning</div>
+            <p style="font-size: 12px; color: #636e72; margin-top: -2px;">Evidence of Autonomous Home Study / Level 3 Master</p>
+
+            <p class="cert-p" style="margin-top: 14px;">This is to certify that</p>
+            <div class="cert-name" id="cert-name">STUDENT NAME</div>
+
+            <p class="cert-p">
+                has successfully achieved <strong>100% completion</strong> in the 
+                <strong>English Master: Level 3</strong> interactive learning module, demonstrating excellence in 
+                spelling, vocabulary, and listening comprehension.
+            </p>
+
+            <div class="cert-meta-grid">
+                <div><strong>School:</strong> SJKC Nan Hwa</div>
+                <div><strong>Subject:</strong> English Language (Year 4 / Level 3)</div>
+                <div><strong>Date:</strong> <span id="cert-date"></span></div>
+                <div><strong>Time Taken:</strong> <span id="cert-time"></span></div>
+                <div><strong>Total Words Mastered:</strong> 100 / 100 Words ⭐</div>
+                <div><strong>Status:</strong> Verified Home Learning</div>
+            </div>
+
+            <div class="cert-footer-row">
+                <div class="cert-sig">
+                    <div>English Subject Teacher</div>
+                    <div style="font-size: 10px; color:#b2bec3;">SJKC Nan Hwa</div>
+                </div>
+                <div class="cert-seal">
+                    <span>SJKC NAN HWA</span>
+                    <span>★ ★ ★</span>
+                    <span>OFFICIAL</span>
+                </div>
+                <div class="cert-sig">
+                    <div>Parent / Guardian</div>
+                    <div style="font-size: 10px; color:#b2bec3;">Signature & Acknowledgement</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="cert-actions">
+            <button class="btn" style="background:var(--primary); max-width: 200px;" onclick="window.print()">🖨️ Print / Save as PDF</button>
+            <button class="btn" style="background:#b2bec3; max-width: 140px;" onclick="location.reload()">🔄 Play Again</button>
+        </div>
+    </section>
+
+<script>
+    // --- 1. ROSTER & TIME ENGINE ---
+    const sessionStartTime = new Date();
+
+    // SJKC Nan Hwa Updated 21-Student Roster
+    const sjkcRoster = [
+        "BOK KHAI HAO",
+        "CHAN JIE YU",
+        "CHOO MING EN",
+        "GAN RUI YIING",
+        "GAN YU ZHE",
+        "GOH JUN HEN",
+        "JAYDEN SIM JIA HAO",
+        "JOLIN TOW SHI MIN",
+        "KOO EN ZE",
+        "LE THI KIEU NHI",
+        "LEE SHI JUN",
+        "LIM JIA HAO",
+        "LIM YOU JIE",
+        "MASON LOH MING XUAN",
+        "NG EN HAO",
+        "NG MIN YUE",
+        "TAN YEN SEE",
+        "TOH PIN JOE",
+        "TOW HAO REN",
+        "YEO JOEY",
+        "ZITLE ONG"
+    ];
+
+    let selectedStudentNum = null;
+    let selectedStudentName = "";
+
+    function initStudentGrid() {
+        const grid = document.getElementById('student-grid');
+        grid.innerHTML = '';
+        for (let i = 1; i <= 21; i++) {
+            const btn = document.createElement('button');
+            btn.className = 'num-btn';
+            btn.textContent = i;
+            btn.onclick = () => selectStudentNum(i);
+            grid.appendChild(btn);
+        }
+    }
+
+    function selectStudentNum(num) {
+        selectedStudentNum = num;
+        selectedStudentName = sjkcRoster[num - 1];
+
+        document.querySelectorAll('.num-btn').forEach((b, idx) => {
+            b.classList.toggle('selected', (idx + 1) === num);
+        });
+
+        document.getElementById('name-display').textContent = `No. ${num} - ${selectedStudentName}`;
+        document.getElementById('btn-cert-submit').disabled = false;
+        playSound('success');
+    }
+
+    function editNamePrompt() {
+        if (!selectedStudentNum) {
+            alert("Please pick your number first!");
+            return;
+        }
+        const custom = prompt("Edit your name for the certificate:", selectedStudentName);
+        if (custom && custom.trim() !== "") {
+            selectedStudentName = custom.trim().toUpperCase();
+            document.getElementById('name-display').textContent = `No. ${selectedStudentNum} - ${selectedStudentName}`;
+        }
+    }
+
+    function openCertificate() {
+        document.getElementById('student-modal').style.display = 'none';
+        document.getElementById('game-card').style.display = 'none';
+
+        const cert = document.getElementById('certificate-screen');
+        cert.style.display = 'block';
+
+        const sessionEndTime = new Date();
+        const optionsDate = { dateStyle: 'full', timeZone: 'Asia/Kuala_Lumpur' };
+        const optionsTime = { hour: '2-digit', minute: '2-digit', hour12: true, timeZone: 'Asia/Kuala_Lumpur' };
+
+        const dateStr = new Intl.DateTimeFormat('en-GB', optionsDate).format(sessionEndTime);
+        const startStr = new Intl.DateTimeFormat('en-GB', optionsTime).format(sessionStartTime);
+        const endStr = new Intl.DateTimeFormat('en-GB', optionsTime).format(sessionEndTime);
+
+        document.getElementById('cert-name').textContent = `${selectedStudentName} (No. ${selectedStudentNum})`;
+        document.getElementById('cert-date').textContent = dateStr;
+        document.getElementById('cert-time').textContent = `${startStr} to ${endStr} (GMT+8)`;
+
+        fireConfetti();
+        playSound('success');
+    }
+
+    // --- 2. AUDIO ENGINE (Synthesizer) ---
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+    function playSound(type) {
+        if (audioCtx.state === 'suspended') audioCtx.resume();
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        const now = audioCtx.currentTime;
+
+        if (type === 'success') {
+            osc.type = 'triangle';
+            osc.frequency.setValueAtTime(523.25, now);
+            osc.frequency.setValueAtTime(659.25, now + 0.1);
+            osc.frequency.setValueAtTime(783.99, now + 0.2);
+            osc.frequency.setValueAtTime(1046.50, now + 0.3);
+            gain.gain.setValueAtTime(0.1, now);
+            gain.gain.linearRampToValueAtTime(0, now + 0.6);
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.start();
+            osc.stop(now + 0.6);
+        } else if (type === 'error') {
+            osc.type = 'sawtooth';
+            osc.frequency.setValueAtTime(150, now);
+            osc.frequency.linearRampToValueAtTime(100, now + 0.3);
+            gain.gain.setValueAtTime(0.2, now);
+            gain.gain.linearRampToValueAtTime(0, now + 0.3);
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.start();
+            osc.stop(now + 0.3);
+        }
+    }
+
+    function speakSentence(text) {
+        window.speechSynthesis.cancel();
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.lang = 'en-GB';
+        utterance.rate = 0.85;
+        utterance.pitch = 1.1;
+        window.speechSynthesis.speak(utterance);
+    }
+
+    // --- 3. DATASET (100 WORDS) ---
+    const wordList = [
+        {w: "Pretty", s: "The princess looks very ___.", t: "pretty princess"},
+        {w: "Ugly", s: "The monster was ___.", t: "ugly cartoon monster"},
+        {w: "Straight", s: "She has ___ hair.", t: "straight hair girl"},
+        {w: "Curly", s: "He has ___ hair.", t: "curly hair boy"},
+        {w: "Blonde", s: "She has ___ hair.", t: "blonde hair woman"},
+        {w: "Purple", s: "The grapes are ___.", t: "purple grapes"},
+        {w: "Twenty", s: "The number is ___.", t: "number 20 colorful"},
+        {w: "Family", s: "I love my ___.", t: "happy family"},
+        {w: "Friend", s: "He is my best ___.", t: "best friends kids"},
+        {w: "Name", s: "Write your ___.", t: "hello name tag"},
+        {w: "Always", s: "I ___ brush my teeth.", t: "brushing teeth child"},
+        {w: "Sometimes", s: "___ I walk to school.", t: "walking to school"},
+        {w: "Never", s: "Fish ___ walk.", t: "fish underwater"},
+        {w: "Wake up", s: "I ___ at six.", t: "waking up morning"},
+        {w: "Brush", s: "___ your hair.", t: "girl brushing hair"},
+        {w: "Shower", s: "Take a ___.", t: "shower bathroom"},
+        {w: "Breakfast", s: "Eat your ___.", t: "pancakes breakfast"},
+        {w: "School", s: "Go to ___.", t: "school building"},
+        {w: "Homework", s: "Do your ___.", t: "child doing homework"},
+        {w: "Watch", s: "___ the television.", t: "watching tv"},
+        {w: "Doing", s: "What are you ___?", t: "thinking question"},
+        {w: "Playing", s: "They are ___.", t: "kids playing park"},
+        {w: "Karate", s: "He is doing ___.", t: "karate kid"},
+        {w: "Diving", s: "She is ___.", t: "diving pool"},
+        {w: "Painting", s: "He is ___.", t: "painting art"},
+        {w: "Swimming", s: "I like ___.", t: "swimming pool"},
+        {w: "Dancing", s: "They are ___.", t: "kids dancing"},
+        {w: "Singing", s: "She is ___.", t: "singing microphone"},
+        {w: "Table tennis", s: "Play ___.", t: "table tennis ping pong"},
+        {w: "Exercise", s: "___ is good.", t: "kids exercising"},
+        {w: "Season", s: "Winter is a ___.", t: "four seasons tree"},
+        {w: "Spring", s: "Flowers in ___.", t: "spring season"},
+        {w: "Summer", s: "Hot in ___.", t: "summer beach sun"},
+        {w: "Autumn", s: "Leaves in ___.", t: "autumn leaves"},
+        {w: "Winter", s: "Snow in ___.", t: "winter snow"},
+        {w: "Sunny", s: "It is ___.", t: "sunny sky"},
+        {w: "Raining", s: "It is ___.", t: "raining umbrella"},
+        {w: "Snowing", s: "It is ___.", t: "snowing winter"},
+        {w: "Windy", s: "It is ___.", t: "windy tree"},
+        {w: "Cold", s: "Ice cream is ___.", t: "ice cream"},
+        {w: "House", s: "My big ___.", t: "house exterior"},
+        {w: "Kitchen", s: "Cook in the ___.", t: "kitchen interior"},
+        {w: "Living room", s: "Sit in the ___.", t: "living room sofa"},
+        {w: "Bedroom", s: "Sleep in the ___.", t: "bedroom bed"},
+        {w: "Bathroom", s: "Wash in the ___.", t: "bathroom sink"},
+        {w: "Cupboard", s: "Open the ___.", t: "wooden cupboard"},
+        {w: "Armchair", s: "Sit on the ___.", t: "armchair"},
+        {w: "Bookcase", s: "Books on the ___.", t: "bookcase full"},
+        {w: "Fridge", s: "Milk in the ___.", t: "fridge open"},
+        {w: "Garden", s: "Play in the ___.", t: "garden flowers"},
+        {w: "Onions", s: "Chop the ___.", t: "red onions"},
+        {w: "Lettuce", s: "Green ___.", t: "lettuce"},
+        {w: "Biscuits", s: "I like ___.", t: "cookies biscuits"},
+        {w: "Chocolate", s: "Sweet ___.", t: "chocolate bar"},
+        {w: "Sugar", s: "Sweet ___.", t: "spoon sugar"},
+        {w: "Flour", s: "Bake with ___.", t: "flour bag"},
+        {w: "Milk", s: "Drink ___.", t: "glass of milk"},
+        {w: "Butter", s: "___ on toast.", t: "butter knife"},
+        {w: "Eggs", s: "Fry the ___.", t: "eggs carton"},
+        {w: "Pancakes", s: "I love ___.", t: "stack pancakes"},
+        {w: "Hospital", s: "Go to the ___.", t: "hospital building"},
+        {w: "Museum", s: "Visit the ___.", t: "museum exhibit"},
+        {w: "Library", s: "Read in the ___.", t: "library books"},
+        {w: "Cinema", s: "Movies at the ___.", t: "cinema theater"},
+        {w: "Swimming pool", s: "In the ___.", t: "swimming pool water"},
+        {w: "Shopping centre", s: "Go to the ___.", t: "shopping mall"},
+        {w: "Turn left", s: "Please ___.", t: "turn left sign"},
+        {w: "Turn right", s: "Please ___.", t: "turn right sign"},
+        {w: "Go straight", s: "___ ahead.", t: "straight road"},
+        {w: "Quiet", s: "Please be ___.", t: "shhh quiet"},
+        {w: "Yesterday", s: "___ was Sunday.", t: "calendar"},
+        {w: "Morning", s: "Good ___.", t: "sunrise morning"},
+        {w: "Afternoon", s: "Good ___.", t: "noon sun"},
+        {w: "Evening", s: "Good ___.", t: "sunset evening"},
+        {w: "Was", s: "He ___ happy.", t: "happy face boy"},
+        {w: "Home", s: "Go back ___.", t: "home house"},
+        {w: "Shopping", s: "Go ___.", t: "shopping cart"},
+        {w: "Noisy", s: "Drums are ___.", t: "drums loud"},
+        {w: "Scared", s: "He is ___.", t: "scared face"},
+        {w: "Funny", s: "Clowns are ___.", t: "funny clown"},
+        {w: "Holiday", s: "Summer ___.", t: "beach vacation"},
+        {w: "Island", s: "A tropical ___.", t: "island"},
+        {w: "Beach", s: "Sand on the ___.", t: "beach sand"},
+        {w: "Sun", s: "The hot ___.", t: "sun sky"},
+        {w: "Shell", s: "A sea ___.", t: "seashell"},
+        {w: "Pack", s: "___ your bag.", t: "packing suitcase"},
+        {w: "Forest", s: "Trees in the ___.", t: "forest woods"},
+        {w: "Went", s: "She ___ home.", t: "walking away"},
+        {w: "Saw", s: "I ___ a bird.", t: "binoculars"},
+        {w: "Ate", s: "He ___ pizza.", t: "eating pizza"},
+        {w: "World", s: "The big ___.", t: "earth globe"},
+        {w: "Solar system", s: "The ___.", t: "solar system"},
+        {w: "Cheetah", s: "A fast ___.", t: "cheetah running"},
+        {w: "Whale", s: "A big ___.", t: "whale ocean"},
+        {w: "Shark", s: "A scary ___.", t: "shark"},
+        {w: "Strong", s: "He is ___.", t: "strong man"},
+        {w: "Fastest", s: "The ___ runner.", t: "sprinter running"},
+        {w: "Heaviest", s: "The ___ animal.", t: "elephant"},
+        {w: "Dangerous", s: "Fire is ___.", t: "fire danger"},
+        {w: "Safe", s: "Helmet is ___.", t: "safety helmet"}
+    ];
+
+    // --- 4. GAME LOGIC ---
+    let index = 0;
+    let questions = [];
+    const imgEl = document.getElementById('game-image');
+    const inputEl = document.getElementById('input-word');
+    const sentenceEl = document.getElementById('sentence-box');
+    const loader = document.getElementById('loader');
+
+    function startGame() {
+        document.getElementById('overlay').classList.add('hidden');
+        if (audioCtx.state === 'suspended') audioCtx.resume();
+        
+        questions = [...wordList].sort(() => 0.5 - Math.random());
+        index = 0;
+        loadLevel();
+    }
+
+    function loadLevel() {
+        const q = questions[index];
+        document.getElementById('score-badge').innerText = `Word ${index + 1} / ${questions.length}`;
+
+        inputEl.value = "";
+        inputEl.className = ""; 
+        inputEl.disabled = false;
+        
+        const displaySentence = q.s.replace('___', '<span class="blank">_______</span>');
+        sentenceEl.innerHTML = displaySentence;
+
+        imgEl.style.opacity = '0';
+        loader.style.display = 'block';
+        
+        const imgUrl = `https://tse2.mm.bing.net/th?q=${encodeURIComponent(q.t)}&w=600&h=400&c=7&rs=1&p=0`;
+        imgEl.src = imgUrl;
+
+        imgEl.onload = () => {
+            loader.style.display = 'none';
+            imgEl.style.opacity = '1';
+        };
+
+        const fullSentence = q.s.replace('___', q.w);
+        inputEl.focus();
+        setTimeout(() => speakSentence(fullSentence), 600);
+    }
+
+    function imgError() {
+        loader.style.display = 'none';
+        imgEl.src = "https://via.placeholder.com/600x300/e0e0e0/888888?text=Listen+Closely"; 
+        imgEl.style.opacity = '1';
+    }
+
+    function playAudio() {
+        const q = questions[index];
+        const fullSentence = q.s.replace('___', q.w);
+        speakSentence(fullSentence);
+        inputEl.focus();
+    }
+
+    function checkAnswer() {
+        const userVal = inputEl.value.trim().toLowerCase();
+        const correctVal = questions[index].w.toLowerCase();
+
+        if (userVal === correctVal) {
+            handleCorrect();
+        } else {
+            handleWrong();
+        }
+    }
+
+    function handleCorrect() {
+        inputEl.disabled = true;
+        playSound('success');
+        fireConfetti();
+        
+        const q = questions[index];
+        const filledSentence = q.s.replace('___', `<span class="filled-correct">${q.w}</span>`);
+        sentenceEl.innerHTML = filledSentence;
+
+        setTimeout(() => {
+            index++;
+            if (index < questions.length) {
+                loadLevel();
+            } else {
+                // 100% Progress Reached -> Trigger Certificate Student Selection
+                initStudentGrid();
+                document.getElementById('student-modal').style.display = 'flex';
+            }
+        }, 1500);
+    }
+
+    function handleWrong() {
+        playSound('error');
+        inputEl.classList.add('shake');
+        
+        setTimeout(() => {
+            inputEl.classList.remove('shake');
+            inputEl.value = "";
+            inputEl.focus();
+        }, 500);
+    }
+
+    inputEl.addEventListener('keyup', (e) => {
+        if (e.key === "Enter") checkAnswer();
+    });
+
+    // --- 5. CONFETTI EFFECT ---
+    const canvas = document.getElementById('particles');
+    const ctx = canvas.getContext('2d');
+    let particles = [];
+
+    function resizeCanvas() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+    }
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
+
+    function fireConfetti() {
+        for (let i = 0; i < 90; i++) {
+            particles.push({
+                x: window.innerWidth / 2,
+                y: window.innerHeight / 2,
+                vx: (Math.random() - 0.5) * 20,
+                vy: (Math.random() - 0.5) * 20,
+                life: 100,
+                color: `hsl(${Math.random() * 360}, 100%, 50%)`,
+                size: Math.random() * 10 + 5
+            });
+        }
+    }
+
+    function updateParticles() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        
+        for (let i = 0; i < particles.length; i++) {
+            let p = particles[i];
+            p.x += p.vx;
+            p.y += p.vy;
+            p.vy += 0.5;
+            p.life--;
+            p.size *= 0.96;
+
+            ctx.fillStyle = p.color;
+            ctx.beginPath();
+            ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+            ctx.fill();
+
+            if (p.life <= 0) {
+                particles.splice(i, 1);
+                i--;
+            }
+        }
+        requestAnimationFrame(updateParticles);
+    }
+    updateParticles();
+</script>
+</body>
+</html>
