@@ -1,0 +1,1088 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>Get Smart Plus 4 - Grammar Review | SJKC NAN HWA</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Quicksand:wght@500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-gradient: linear-gradient(160deg, #f0fdf4 0%, #e0f2fe 55%, #fefce8 100%);
+      --text-main: #0f172a;
+      --text-muted: #475569;
+      --primary: #2563eb;
+      --primary-active: #1d4ed8;
+      --border-card: #e2e8f0;
+      --safe-top: env(safe-area-inset-top, 0px);
+      --safe-bottom: env(safe-area-inset-bottom, 0px);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+      touch-action: manipulation;
+    }
+
+    html, body {
+      width: 100%;
+      height: 100%;
+      min-height: 100vh;
+      min-height: 100dvh;
+      font-family: 'Fredoka', 'Quicksand', -apple-system, sans-serif;
+      background: var(--bg-gradient);
+      color: var(--text-main);
+      overflow-x: hidden;
+      user-select: none;
+    }
+
+    /* Ambient background blobs for phone */
+    .phone-bg-blob {
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(50px);
+      z-index: -1;
+      opacity: 0.6;
+      pointer-events: none;
+    }
+    .blob-top { width: 220px; height: 220px; background: #bae6fd; top: -50px; left: -50px; }
+    .blob-bot { width: 260px; height: 260px; background: #fef08a; bottom: -70px; right: -50px; }
+
+    /* =========================================================
+       MOBILE FULL-BLEED WRAPPER
+       ========================================================= */
+    .mobile-app {
+      width: 100%;
+      min-height: 100vh;
+      min-height: 100dvh;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
+      padding-top: var(--safe-top);
+      padding-bottom: var(--safe-bottom);
+    }
+
+    /* Sticky Top Bar on Phone */
+    .mobile-header {
+      width: 100%;
+      position: sticky;
+      top: 0;
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1.5px solid rgba(226, 232, 240, 0.9);
+      padding: 10px 16px 8px;
+      z-index: 50;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .header-info-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: 100%;
+    }
+
+    .school-badge-sm {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: #1e3a8a;
+      background: #eff6ff;
+      border: 1.5px solid #bfdbfe;
+      padding: 4px 12px;
+      border-radius: 999px;
+    }
+
+    .counter-badge-sm {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: #0369a1;
+      background: #e0f2fe;
+      padding: 4px 12px;
+      border-radius: 999px;
+    }
+
+    .mobile-progress-track {
+      width: 100%;
+      height: 6px;
+      background: #e2e8f0;
+      border-radius: 999px;
+      overflow: hidden;
+    }
+
+    .mobile-progress-fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #38bdf8, #2563eb);
+      border-radius: 999px;
+      transition: width 0.3s ease;
+    }
+
+    /* =========================================================
+       SCREENS (FULL BLEED, PHONE OPTIMIZED)
+       ========================================================= */
+    .mobile-screen {
+      flex: 1;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 24px 20px;
+    }
+
+    /* Screen 1: Welcome */
+    .welcome-box {
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      max-width: 380px;
+      margin: auto 0;
+    }
+
+    .welcome-title {
+      font-size: 2.3rem;
+      font-weight: 700;
+      color: #1e3a8a;
+      line-height: 1.25;
+      margin: 16px 0 10px;
+    }
+
+    .welcome-sub {
+      font-size: 1.15rem;
+      color: var(--text-muted);
+      line-height: 1.5;
+      margin-bottom: 34px;
+      font-weight: 500;
+    }
+
+    /* Start & Main Action Button */
+    .btn-mobile-action {
+      width: 100%;
+      max-width: 320px;
+      min-height: 60px;
+      background: linear-gradient(135deg, #2563eb, #1d4ed8);
+      color: #ffffff;
+      border: none;
+      border-radius: 999px;
+      font-size: 1.45rem;
+      font-weight: 700;
+      font-family: inherit;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      box-shadow: 0 10px 22px -3px rgba(37, 99, 235, 0.4);
+      transition: transform 0.15s ease, background 0.15s ease;
+    }
+
+    .btn-mobile-action:active {
+      transform: scale(0.97);
+      background: #1e40af;
+    }
+
+    /* Screen 2: Question View */
+    .question-view {
+      justify-content: space-between;
+      padding-top: 16px;
+      padding-bottom: 24px;
+    }
+
+    .mobile-question-area {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      margin-bottom: auto;
+      margin-top: auto;
+      padding: 12px 6px;
+    }
+
+    .mobile-question-text {
+      font-size: clamp(1.6rem, 6.2vw, 2.1rem);
+      font-weight: 700;
+      line-height: 1.35;
+      color: var(--text-main);
+      margin-bottom: 20px;
+      word-break: break-word;
+    }
+
+    .mobile-audio-btn {
+      background: #ffffff;
+      border: 2px solid #93c5fd;
+      color: #1d4ed8;
+      border-radius: 999px;
+      padding: 10px 22px;
+      font-size: 1.1rem;
+      font-weight: 600;
+      font-family: inherit;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 4px 10px rgba(37, 99, 235, 0.1);
+      transition: all 0.15s ease;
+    }
+
+    .mobile-audio-btn:active {
+      transform: scale(0.95);
+      background: #eff6ff;
+    }
+
+    /* Stacked Options: Perfect for mobile thumbs */
+    .mobile-options-stack {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      margin-top: 20px;
+    }
+
+    .mobile-option-btn {
+      width: 100%;
+      min-height: 64px;
+      background: #ffffff;
+      border: 2.5px solid var(--border-card);
+      border-radius: 20px;
+      padding: 14px 20px;
+      font-size: 1.45rem;
+      font-weight: 600;
+      font-family: inherit;
+      color: #1e293b;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+      transition: all 0.15s ease;
+      line-height: 1.25;
+    }
+
+    .mobile-option-btn:active {
+      transform: scale(0.98);
+      border-color: #3b82f6;
+      background: #f0f9ff;
+    }
+
+    .mobile-option-btn.selected-correct {
+      background: #dcfce7 !important;
+      border-color: #22c55e !important;
+      color: #15803d !important;
+    }
+
+    .mobile-option-btn.selected-wrong {
+      background: #fee2e2 !important;
+      border-color: #ef4444 !important;
+      color: #b91c1c !important;
+    }
+
+    /* =========================================================
+       21 BLOBBING 3D BUBBLES (PHONE 3-COLUMN GRID)
+       ========================================================= */
+    .bubbles-screen-wrap {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      padding: 16px 12px 30px;
+      overflow-y: auto;
+    }
+
+    .phone-bubbles-grid {
+      width: 100%;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px 14px;
+      justify-items: center;
+      align-items: center;
+      margin-top: 22px;
+      padding-bottom: 20px;
+    }
+
+    .mobile-blob-3d {
+      width: 82px;
+      height: 82px;
+      border-radius: 46% 54% 52% 48% / 44% 52% 48% 56%;
+      border: none;
+      cursor: pointer;
+      font-family: 'Fredoka', sans-serif;
+      font-size: 1.9rem;
+      font-weight: 700;
+      color: #ffffff;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: inset 0 -6px 12px rgba(0, 0, 0, 0.28),
+                  inset 0 6px 10px rgba(255, 255, 255, 0.7),
+                  0 10px 18px -4px rgba(0, 0, 0, 0.18);
+      animation: morphBlobMobile 5s ease-in-out infinite alternate;
+      transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .mobile-blob-3d::after {
+      content: '';
+      position: absolute;
+      top: 12px;
+      left: 15px;
+      width: 18px;
+      height: 10px;
+      background: rgba(255, 255, 255, 0.75);
+      border-radius: 50%;
+      transform: rotate(-35deg);
+      filter: blur(1px);
+    }
+
+    .mobile-blob-3d:active {
+      transform: scale(1.15);
+    }
+
+    /* 3D Color themes */
+    .c1 { background: radial-gradient(circle at 35% 30%, #38bdf8, #0284c7); }
+    .c2 { background: radial-gradient(circle at 35% 30%, #f472b6, #db2777); }
+    .c3 { background: radial-gradient(circle at 35% 30%, #4ade80, #16a34a); }
+    .c4 { background: radial-gradient(circle at 35% 30%, #fbbf24, #d97706); }
+    .c5 { background: radial-gradient(circle at 35% 30%, #a78bfa, #7c3aed); }
+    .c6 { background: radial-gradient(circle at 35% 30%, #fb7185, #e11d48); }
+    .c7 { background: radial-gradient(circle at 35% 30%, #2dd4bf, #0d9488); }
+
+    @keyframes morphBlobMobile {
+      0% { border-radius: 46% 54% 52% 48% / 44% 52% 48% 56%; }
+      33% { border-radius: 56% 44% 48% 52% / 52% 48% 52% 48%; }
+      66% { border-radius: 48% 52% 58% 42% / 42% 56% 44% 58%; }
+      100% { border-radius: 54% 46% 44% 56% / 50% 46% 54% 50%; }
+    }
+
+    /* =========================================================
+       MOBILE CERTIFICATE MODAL
+       ========================================================= */
+    .mobile-modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.75);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      z-index: 1000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 16px 12px;
+    }
+
+    .mobile-modal-card {
+      background: #ffffff;
+      width: 100%;
+      max-width: 440px;
+      border-radius: 24px;
+      padding: 18px 14px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      max-height: 94vh;
+      max-height: 94dvh;
+      overflow-y: auto;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.35);
+    }
+
+    .cert-canvas-frame {
+      width: 100%;
+      border-radius: 12px;
+      overflow: hidden;
+      margin: 12px 0 16px;
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+      background: #fff;
+    }
+
+    canvas#certCanvas {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    .modal-btn-col {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .btn-mobile-secondary {
+      width: 100%;
+      min-height: 50px;
+      background: #f1f5f9;
+      color: #334155;
+      border: 2px solid #cbd5e1;
+      border-radius: 999px;
+      font-size: 1.15rem;
+      font-weight: 600;
+      font-family: inherit;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .btn-mobile-secondary:active {
+      background: #e2e8f0;
+    }
+
+    @media print {
+      body * {
+        visibility: hidden !important;
+      }
+      #certCanvas, #certCanvas * {
+        visibility: visible !important;
+      }
+      .mobile-modal-overlay {
+        position: fixed;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background: transparent !important;
+        display: flex !important;
+        justify-content: center;
+        align-items: center;
+        padding: 0;
+      }
+      .mobile-modal-card {
+        box-shadow: none;
+        padding: 0;
+        max-width: 100%;
+      }
+      .modal-btn-col, .mobile-header {
+        display: none !important;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="phone-bg-blob blob-top"></div>
+  <div class="phone-bg-blob blob-bot"></div>
+
+  <main class="mobile-app">
+
+    <!-- Sticky Mobile Header -->
+    <header class="mobile-header" id="mobileHeader" style="display: none;">
+      <div class="header-info-row">
+        <span class="school-badge-sm">🏫 SJKC NAN HWA</span>
+        <span class="counter-badge-sm" id="lblProgress">1 / 30</span>
+      </div>
+      <div class="mobile-progress-track">
+        <div class="mobile-progress-fill" id="progressFill"></div>
+      </div>
+    </header>
+
+    <!-- SCREEN 1: WELCOME (MOBILE FULL BLEED) -->
+    <section class="mobile-screen" id="screenStart">
+      <div class="welcome-box">
+        <span class="school-badge-sm" style="font-size: 1.05rem; padding: 6px 16px;">🏫 SJKC NAN HWA</span>
+        <h1 class="welcome-title">Year-End English Review</h1>
+        <p class="welcome-sub">
+          Get Smart Plus 4<br>
+          Grammar Challenge • 30 Questions<br>
+          Tap the best answer to earn your certificate!
+        </p>
+        <button class="btn-mobile-action" id="btnStartApp">
+          <span>Start Challenge</span> 🚀
+        </button>
+      </div>
+    </section>
+
+    <!-- SCREEN 2: SINGLE QUESTION VIEW (FULL BLEED PHONE) -->
+    <section class="mobile-screen question-view" id="screenQuestion" style="display: none;">
+      <div class="mobile-question-area">
+        <h2 class="mobile-question-text" id="lblQuestionText">Loading...</h2>
+        <button class="mobile-audio-btn" id="btnAudioReplay">
+          <span>🔊</span> Listen (UK English)
+        </button>
+      </div>
+
+      <div class="mobile-options-stack" id="optionsStack">
+        <!-- 4 stacked thumb-friendly buttons -->
+      </div>
+    </section>
+
+    <!-- SCREEN 3: RETRY NOTICE -->
+    <section class="mobile-screen" id="screenRetry" style="display: none;">
+      <div class="welcome-box">
+        <span class="school-badge-sm">🏫 SJKC NAN HWA</span>
+        <h1 class="welcome-title" style="color: #0369a1;">Great Effort! 🌟</h1>
+        <p class="welcome-sub">
+          Let's review the questions you missed to unlock your official Certificate!
+        </p>
+        <button class="btn-mobile-action" id="btnStartRetry">
+          <span>Continue</span> ✨
+        </button>
+      </div>
+    </section>
+
+    <!-- SCREEN 4: 21 BLOBBING 3D BUBBLES -->
+    <section class="mobile-screen bubbles-screen-wrap" id="screenBubbles" style="display: none;">
+      <span class="school-badge-sm" style="margin-bottom: 12px;">🏫 SJKC NAN HWA</span>
+      <h1 class="welcome-title" style="font-size: 2rem; margin: 0 0 6px;">🎉 Congratulations!</h1>
+      <p class="welcome-sub" style="margin-bottom: 8px; font-size: 1rem;">
+        Tap your assigned number to download your certificate:
+      </p>
+
+      <div class="phone-bubbles-grid" id="bubblesGrid">
+        <!-- 21 3D Bubbles for mobile -->
+      </div>
+    </section>
+
+  </main>
+
+  <!-- MOBILE CERTIFICATE MODAL -->
+  <div class="mobile-modal-overlay" id="certModal">
+    <div class="mobile-modal-card">
+      <span class="school-badge-sm" style="margin-bottom: 4px;">🏫 SJKC NAN HWA</span>
+      <h3 style="font-size: 1.35rem; color: #1e3a8a; text-align: center; margin: 6px 0;" id="modalStudentName">Certificate</h3>
+
+      <div class="cert-canvas-frame">
+        <canvas id="certCanvas" width="1300" height="920"></canvas>
+      </div>
+
+      <div class="modal-btn-col">
+        <button class="btn-mobile-action" id="btnDownloadCert" style="min-height: 52px; font-size: 1.2rem;">
+          📥 Download Certificate
+        </button>
+        <button class="btn-mobile-secondary" id="btnPrintCert">
+          🖨️ Print / Save PDF
+        </button>
+        <button class="btn-mobile-secondary" id="btnCloseModal">
+          🔙 Choose Another
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    /* =========================================================
+       1. 21 STUDENTS MAPPING
+       ========================================================= */
+    const STUDENTS = [
+      { id: 1, name: "BOK KHAI HAO" },
+      { id: 2, name: "CHAN JIE YU" },
+      { id: 3, name: "CHOO MING EN" },
+      { id: 4, name: "GAN RUI YIING" },
+      { id: 5, name: "GAN YU ZHE" },
+      { id: 6, name: "GOH JUN HEN" },
+      { id: 7, name: "JAYDEN SIM JIA HAO" },
+      { id: 8, name: "JOLIN TOW SHI MIN" },
+      { id: 9, name: "KOO EN ZE" },
+      { id: 10, name: "LE THI KIEU NHI" },
+      { id: 11, name: "LEE SHI JUN" },
+      { id: 12, name: "LIM JIA HAO" },
+      { id: 13, name: "LIM YOU JIE" },
+      { id: 14, name: "MASON LOH MING XUAN" },
+      { id: 15, name: "NG EN HAO" },
+      { id: 16, name: "NG MIN YUE" },
+      { id: 17, name: "TAN YEN SEE" },
+      { id: 18, name: "TOH PIN JOE" },
+      { id: 19, name: "TOW HAO REN" },
+      { id: 20, name: "YEO JOEY" },
+      { id: 21, name: "ZITLE ONG" }
+    ];
+
+    /* =========================================================
+       2. 30 PURE GRAMMAR QUESTIONS (YEAR 4 GET SMART PLUS 4)
+       ========================================================= */
+    const GRAMMAR_BANK = [
+      { q: "He ______ plays football. He plays every single day!", options: ["always", "never", "sometimes", "rarely"], a: "always" },
+      { q: "Look! What is he doing? He ______ a book.", options: ["is reading", "reads", "read", "reading"], a: "is reading" },
+      { q: "Every morning, she ______ to school by bus.", options: ["goes", "go", "going", "is go"], a: "goes" },
+      { q: "______ do you have English class? — Three times a week.", options: ["How often", "How many", "How much", "How old"], a: "How often" },
+      { q: "He ______ wash the car before going to the park.", options: ["has to", "have to", "having to", "is have to"], a: "has to" },
+      { q: "They ______ rake the leaves because it is raining.", options: ["don't have to", "doesn't have to", "not have to", "hasn't to"], a: "don't have to" },
+      { q: "Yesterday, we ______ a football match on TV.", options: ["watched", "watch", "watching", "watches"], a: "watched" },
+      { q: "Did you ______ up at seven o'clock yesterday?", options: ["wake", "woke", "waking", "wakes"], a: "wake" },
+      { q: "Last night, a mosquito ______ him on the arm.", options: ["bit", "bite", "bites", "biting"], a: "bit" },
+      { q: "Two days ago, my family ______ to the museum.", options: ["went", "go", "goes", "going"], a: "went" },
+      { q: "Tomorrow, I am going ______ my grandparents.", options: ["to visit", "visit", "visiting", "visited"], a: "to visit" },
+      { q: "She is not going ______ up late tonight.", options: ["to stay", "stay", "staying", "stayed"], a: "to stay" },
+      { q: "They ______ going to decorate the classroom tomorrow.", options: ["are", "is", "am", "be"], a: "are" },
+      { q: "There isn't ______ milk in the fridge.", options: ["any", "some", "many", "a"], a: "any" },
+      { q: "There are ______ apples on the table.", options: ["some", "any", "much", "an"], a: "some" },
+      { q: "______ meals do you eat every day?", options: ["How many", "How much", "How long", "How often"], a: "How many" },
+      { q: "______ water do you drink every day?", options: ["How much", "How many", "How long", "How far"], a: "How much" },
+      { q: "Please ______ your seat belt in the car.", options: ["fasten", "fastens", "fastening", "fastened"], a: "fasten" },
+      { q: "______ run across the street! It is dangerous.", options: ["Don't", "Not", "Doesn't", "Aren't"], a: "Don't" },
+      { q: "Every morning, Mr Lee goes to work ______ train.", options: ["by", "on", "with", "in"], a: "by" },
+      { q: "The school is very near, so the children walk ______ foot.", options: ["on", "by", "with", "at"], a: "on" },
+      { q: "My sister needs help. Can you help ______?", options: ["her", "she", "hers", "him"], a: "her" },
+      { q: "This is your jacket, and that one is ______.", options: ["mine", "my", "me", "I"], a: "mine" },
+      { q: "Listen! There is ______ knocking at the door.", options: ["someone", "anyone", "nothing", "nowhere"], a: "someone" },
+      { q: "An elephant is ______ than a horse.", options: ["bigger", "big", "biggest", "more big"], a: "bigger" },
+      { q: "Playing with fire is ______ than playing with toys.", options: ["more dangerous", "dangerouser", "most dangerous", "as dangerous"], a: "more dangerous" },
+      { q: "This red pencil is as long ______ the blue pencil.", options: ["as", "than", "like", "so"], a: "as" },
+      { q: "Carlos is the ______ runner in the whole school.", options: ["fastest", "faster", "fast", "more fast"], a: "fastest" },
+      { q: "She loves ______ books in the library.", options: ["reading", "read", "reads", "is read"], a: "reading" },
+      { q: "You have a bad toothache. You ______ go to the dentist.", options: ["should", "shouldn't", "can't", "wouldn't"], a: "should" }
+    ];
+
+    const PREPARED_QUESTIONS = GRAMMAR_BANK.map((item, idx) => ({
+      id: idx,
+      q: item.q,
+      options: [...item.options].sort(() => Math.random() - 0.5),
+      correct: item.a
+    }));
+
+    /* =========================================================
+       3. STATE
+       ========================================================= */
+    let currentQuizList = [];
+    let currentIndex = 0;
+    let isRetry = false;
+    let initialScore = 0;
+    let wrongQuestions = [];
+    let retryCorrectCount = 0;
+
+    let timeStart = null;
+    let timeEnd = null;
+    let activeStudent = null;
+
+    /* DOM */
+    const mobileHeader = document.getElementById('mobileHeader');
+    const lblProgress = document.getElementById('lblProgress');
+    const progressFill = document.getElementById('progressFill');
+
+    const screenStart = document.getElementById('screenStart');
+    const screenQuestion = document.getElementById('screenQuestion');
+    const screenRetry = document.getElementById('screenRetry');
+    const screenBubbles = document.getElementById('screenBubbles');
+    const certModal = document.getElementById('certModal');
+
+    const lblQuestionText = document.getElementById('lblQuestionText');
+    const optionsStack = document.getElementById('optionsStack');
+    const btnAudioReplay = document.getElementById('btnAudioReplay');
+
+    /* =========================================================
+       4. TTS AUDIO (UK ENGLISH)
+       ========================================================= */
+    let globalAudio = null;
+
+    function speakQuestionUK(text) {
+      if (globalAudio) {
+        globalAudio.pause();
+        globalAudio = null;
+      }
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+      }
+
+      const cleanText = text.replace(/_{2,}/g, 'blank').replace(/—/g, ', ').trim();
+      const ttsUrl = `https://translate.google.com/translate_tts?ie=UTF-8&client=tw-ob&tl=en-GB&q=${encodeURIComponent(cleanText)}`;
+      
+      const audio = new Audio();
+      audio.crossOrigin = "anonymous";
+      audio.src = ttsUrl;
+
+      const fallbackWebSpeech = () => {
+        if (!('speechSynthesis' in window)) return;
+        const utter = new SpeechSynthesisUtterance(cleanText);
+        utter.lang = 'en-GB';
+        utter.rate = 0.88;
+        const voices = window.speechSynthesis.getVoices();
+        const uk = voices.find(v => v.lang === 'en-GB' || v.name.includes('UK') || v.name.includes('British'));
+        if (uk) utter.voice = uk;
+        window.speechSynthesis.speak(utter);
+      };
+
+      audio.onplay = () => { globalAudio = audio; };
+      audio.onerror = () => { fallbackWebSpeech(); };
+
+      const p = audio.play();
+      if (p !== undefined) {
+        p.catch(() => fallbackWebSpeech());
+      }
+    }
+
+    btnAudioReplay.addEventListener('click', () => {
+      const q = currentQuizList[currentIndex];
+      if (q) speakQuestionUK(q.q);
+    });
+
+    /* =========================================================
+       5. QUIZ INTERACTION
+       ========================================================= */
+    document.getElementById('btnStartApp').addEventListener('click', () => {
+      timeStart = new Date();
+      currentQuizList = [...PREPARED_QUESTIONS];
+      currentIndex = 0;
+      isRetry = false;
+      initialScore = 0;
+      wrongQuestions = [];
+
+      screenStart.style.display = 'none';
+      mobileHeader.style.display = 'flex';
+      screenQuestion.style.display = 'flex';
+
+      loadQuestion();
+    });
+
+    function loadQuestion() {
+      const q = currentQuizList[currentIndex];
+      const total = currentQuizList.length;
+
+      lblProgress.textContent = isRetry 
+        ? `Review ${currentIndex + 1}/${total}` 
+        : `${currentIndex + 1} / ${total}`;
+
+      const pct = Math.round((currentIndex / total) * 100);
+      progressFill.style.width = `${pct}%`;
+
+      lblQuestionText.textContent = q.q;
+      optionsStack.innerHTML = '';
+
+      // Auto play UK audio on mobile
+      speakQuestionUK(q.q);
+
+      q.options.forEach(opt => {
+        const btn = document.createElement('button');
+        btn.className = 'mobile-option-btn';
+        btn.textContent = opt;
+        btn.addEventListener('click', () => handleOptionTap(btn, opt, q));
+        optionsStack.appendChild(btn);
+      });
+    }
+
+    function handleOptionTap(button, chosenText, qData) {
+      // Prevent multiple quick taps on mobile
+      const allBtns = optionsStack.querySelectorAll('.mobile-option-btn');
+      allBtns.forEach(b => b.disabled = true);
+
+      const isCorrect = (chosenText === qData.correct);
+
+      if (isCorrect) {
+        button.classList.add('selected-correct');
+        if (!isRetry) initialScore++;
+        else retryCorrectCount++;
+      } else {
+        button.classList.add('selected-wrong');
+        if (!isRetry) wrongQuestions.push(qData);
+      }
+
+      // Fast, smooth mobile transition
+      setTimeout(() => {
+        currentIndex++;
+        if (currentIndex < currentQuizList.length) {
+          loadQuestion();
+        } else {
+          evaluateRoundEnd();
+        }
+      }, 350);
+    }
+
+    function evaluateRoundEnd() {
+      if (!isRetry) {
+        if (wrongQuestions.length === 0) {
+          completeQuiz();
+        } else {
+          screenQuestion.style.display = 'none';
+          mobileHeader.style.display = 'none';
+          screenRetry.style.display = 'flex';
+        }
+      } else {
+        // Must score 60% of missed questions (rule is kept secret)
+        const passingTarget = Math.ceil(wrongQuestions.length * 0.6);
+        if (retryCorrectCount >= passingTarget) {
+          completeQuiz();
+        } else {
+          // Soft retry loop so child never gets left behind
+          retryCorrectCount = 0;
+          currentIndex = 0;
+          loadQuestion();
+        }
+      }
+    }
+
+    document.getElementById('btnStartRetry').addEventListener('click', () => {
+      screenRetry.style.display = 'none';
+      mobileHeader.style.display = 'flex';
+      screenQuestion.style.display = 'flex';
+
+      isRetry = true;
+      currentQuizList = [...wrongQuestions];
+      currentIndex = 0;
+      retryCorrectCount = 0;
+      loadQuestion();
+    });
+
+    function completeQuiz() {
+      timeEnd = new Date();
+      mobileHeader.style.display = 'none';
+      screenQuestion.style.display = 'none';
+      screenRetry.style.display = 'none';
+      screenBubbles.style.display = 'flex';
+
+      createPhoneBubbles();
+    }
+
+    /* =========================================================
+       6. 21 BLOBBING 3D BUBBLES (PHONE TOUCH GRID)
+       ========================================================= */
+    function createPhoneBubbles() {
+      const grid = document.getElementById('bubblesGrid');
+      grid.innerHTML = '';
+
+      STUDENTS.forEach((st, idx) => {
+        const btn = document.createElement('button');
+        const colClass = `c${(idx % 7) + 1}`;
+        btn.className = `mobile-blob-3d ${colClass}`;
+        btn.textContent = st.id;
+
+        btn.style.animationDelay = `${(idx * 0.22).toFixed(2)}s`;
+
+        btn.addEventListener('click', () => {
+          activeStudent = st;
+          document.getElementById('modalStudentName').textContent = `${st.id}. ${st.name}`;
+          renderPhoneCert(st);
+          certModal.style.display = 'flex';
+        });
+
+        grid.appendChild(btn);
+      });
+    }
+
+    /* =========================================================
+       7. CERTIFICATE ENGINE (CANVAS + LIVE MALAYSIA TIME)
+       ========================================================= */
+    function formatMYDate(dateObj) {
+      return dateObj.toLocaleDateString('en-GB', {
+        timeZone: 'Asia/Kuala_Lumpur',
+        day: 'numeric',
+        month: 'long',
+        year: 'numeric'
+      });
+    }
+
+    function formatMYTime(dateObj) {
+      return dateObj.toLocaleTimeString('en-GB', {
+        timeZone: 'Asia/Kuala_Lumpur',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+        hour12: true
+      });
+    }
+
+    function renderPhoneCert(student) {
+      const canvas = document.getElementById('certCanvas');
+      const ctx = canvas.getContext('2d');
+      const w = canvas.width;
+      const h = canvas.height;
+
+      // Clean background
+      const bg = ctx.createLinearGradient(0, 0, w, h);
+      bg.addColorStop(0, '#fefdfa');
+      bg.addColorStop(0.5, '#ffffff');
+      bg.addColorStop(1, '#f0f9ff');
+      ctx.fillStyle = bg;
+      ctx.fillRect(0, 0, w, h);
+
+      // Ornate Border
+      ctx.strokeStyle = "#d4af37";
+      ctx.lineWidth = 14;
+      ctx.strokeRect(30, 30, w - 60, h - 60);
+
+      ctx.strokeStyle = "#1e3a8a";
+      ctx.lineWidth = 4;
+      ctx.strokeRect(46, 46, w - 92, h - 92);
+
+      // Rosette corners
+      [[50, 50], [w - 50, 50], [50, h - 50], [w - 50, h - 50]].forEach(([cx, cy]) => {
+        ctx.fillStyle = "#d4af37";
+        ctx.beginPath();
+        ctx.arc(cx, cy, 14, 0, Math.PI * 2);
+        ctx.fill();
+      });
+
+      // School Name Header
+      ctx.textAlign = "center";
+      ctx.fillStyle = "#1e3a8a";
+      ctx.font = "bold 42px 'Fredoka', sans-serif";
+      ctx.fillText("SJKC NAN HWA", w / 2, 115);
+
+      ctx.fillStyle = "#0284c7";
+      ctx.font = "600 22px 'Fredoka', sans-serif";
+      ctx.fillText("YEAR 4 ENGLISH CEFR • GET SMART PLUS 4", w / 2, 150);
+
+      // Certificate Title
+      ctx.fillStyle = "#b45309";
+      ctx.font = "bold 52px 'Fredoka', sans-serif";
+      ctx.fillText("CERTIFICATE OF ACHIEVEMENT", w / 2, 230);
+
+      // Divider line
+      ctx.strokeStyle = "#cbd5e1";
+      ctx.lineWidth = 3;
+      ctx.beginPath();
+      ctx.moveTo(w / 2 - 260, 260);
+      ctx.lineTo(w / 2 + 260, 260);
+      ctx.stroke();
+
+      // Recipient
+      ctx.fillStyle = "#475569";
+      ctx.font = "500 24px 'Fredoka', sans-serif";
+      ctx.fillText("This is officially awarded to", w / 2, 310);
+
+      // Student Name
+      ctx.fillStyle = "#1e293b";
+      ctx.font = "bold 50px 'Fredoka', sans-serif";
+      ctx.fillText(student.name, w / 2, 375);
+
+      // Underline
+      ctx.strokeStyle = "#2563eb";
+      ctx.lineWidth = 4;
+      ctx.beginPath();
+      ctx.moveTo(w / 2 - 280, 395);
+      ctx.lineTo(w / 2 + 280, 395);
+      ctx.stroke();
+
+      // Statement
+      ctx.fillStyle = "#334155";
+      ctx.font = "500 23px 'Fredoka', sans-serif";
+      ctx.fillText("for successfully executing and completing the Year-End English Review", w / 2, 445);
+      ctx.fillText("demonstrating exemplary grammar competencies and perseverance.", w / 2, 478);
+
+      // Data Verification Card
+      const cardX = 140;
+      const cardY = 525;
+      const cardW = w - 280;
+      const cardH = 175;
+
+      ctx.fillStyle = "#f8fafc";
+      ctx.strokeStyle = "#cbd5e1";
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.roundRect(cardX, cardY, cardW, cardH, 18);
+      ctx.fill();
+      ctx.stroke();
+
+      const startTxt = formatMYTime(timeStart || new Date());
+      const endTxt = formatMYTime(timeEnd || new Date());
+      const dateTxt = formatMYDate(timeEnd || new Date());
+
+      ctx.textAlign = "left";
+
+      // Column 1: Scores
+      ctx.fillStyle = "#64748b";
+      ctx.font = "600 18px 'Fredoka', sans-serif";
+      ctx.fillText("ORIGINAL QUIZ SCORE:", cardX + 36, cardY + 48);
+
+      ctx.fillStyle = "#15803d";
+      ctx.font = "bold 34px 'Fredoka', sans-serif";
+      ctx.fillText(`${initialScore} / 30`, cardX + 36, cardY + 95);
+
+      ctx.fillStyle = "#0369a1";
+      ctx.font = "600 18px 'Fredoka', sans-serif";
+      ctx.fillText("STATUS: ENGLISH LESSON EXECUTED", cardX + 36, cardY + 140);
+
+      // Column 2: Live Malaysia Timestamps
+      const col2X = cardX + cardW / 2 + 20;
+      ctx.fillStyle = "#64748b";
+      ctx.font = "600 18px 'Fredoka', sans-serif";
+      ctx.fillText("LIVE MALAYSIA DATE:", col2X, cardY + 48);
+
+      ctx.fillStyle = "#1e293b";
+      ctx.font = "700 22px 'Fredoka', sans-serif";
+      ctx.fillText(dateTxt, col2X, cardY + 80);
+
+      ctx.fillStyle = "#64748b";
+      ctx.font = "600 17px 'Fredoka', sans-serif";
+      ctx.fillText(`STARTED: ${startTxt}  |  ENDED: ${endTxt}`, col2X, cardY + 125);
+
+      ctx.fillStyle = "#94a3b8";
+      ctx.font = "500 15px 'Fredoka', sans-serif";
+      ctx.fillText("Timezone: Asia/Kuala_Lumpur (MYT)", col2X, cardY + 148);
+
+      // Signatures & Gold Seal
+      ctx.strokeStyle = "#475569";
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.moveTo(180, 805);
+      ctx.lineTo(400, 805);
+      ctx.stroke();
+
+      ctx.textAlign = "center";
+      ctx.fillStyle = "#1e293b";
+      ctx.font = "600 19px 'Fredoka', sans-serif";
+      ctx.fillText("ENGLISH SUBJECT TEACHER", 290, 830);
+      ctx.fillStyle = "#64748b";
+      ctx.font = "500 16px 'Fredoka', sans-serif";
+      ctx.fillText("SJKC Nan Hwa", 290, 852);
+
+      // Center Seal
+      const sealX = w / 2;
+      const sealY = 795;
+      ctx.fillStyle = "#d4af37";
+      ctx.beginPath();
+      ctx.arc(sealX, sealY, 44, 0, Math.PI * 2);
+      ctx.fill();
+
+      ctx.fillStyle = "#fef08a";
+      ctx.beginPath();
+      ctx.arc(sealX, sealY, 36, 0, Math.PI * 2);
+      ctx.fill();
+
+      ctx.fillStyle = "#854d0e";
+      ctx.font = "bold 13px 'Fredoka', sans-serif";
+      ctx.fillText("OFFICIAL", sealX, sealY - 8);
+      ctx.font = "bold 15px 'Fredoka', sans-serif";
+      ctx.fillText("SEAL", sealX, sealY + 10);
+      ctx.font = "bold 11px 'Fredoka', sans-serif";
+      ctx.fillText("★ CERTIFIED ★", sealX, sealY + 24);
+
+      // Right Signature
+      ctx.strokeStyle = "#475569";
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.moveTo(w - 400, 805);
+      ctx.lineTo(w - 180, 805);
+      ctx.stroke();
+
+      ctx.fillStyle = "#1e293b";
+      ctx.font = "600 19px 'Fredoka', sans-serif";
+      ctx.fillText("HEAD OF ENGLISH PANEL", w - 290, 830);
+      ctx.fillStyle = "#64748b";
+      ctx.font = "500 16px 'Fredoka', sans-serif";
+      ctx.fillText("Panitia Bahasa Inggeris", w - 290, 852);
+    }
+
+    /* =========================================================
+       8. MODAL ACTIONS (DOWNLOAD / PRINT / CLOSE)
+       ========================================================= */
+    document.getElementById('btnCloseModal').addEventListener('click', () => {
+      certModal.style.display = 'none';
+    });
+
+    document.getElementById('btnPrintCert').addEventListener('click', () => {
+      window.print();
+    });
+
+    document.getElementById('btnDownloadCert').addEventListener('click', () => {
+      if (!activeStudent) return;
+      const canvas = document.getElementById('certCanvas');
+      const safeName = activeStudent.name.replace(/\s+/g, '_');
+      const filename = `Certificate_${activeStudent.id}_${safeName}.png`;
+
+      const link = document.createElement('a');
+      link.download = filename;
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+    });
+  </script>
+</body>
+</html>
